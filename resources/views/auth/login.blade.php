@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SeaMark URL Shortner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: #fff;
+            overflow: hidden;
+        }
+        .login-header {
+            background-color: #ff9800;
+            color: #fff;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        .login-header span {
+            background: #fff;
+            color: #ff9800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+        .login-body {
+            padding: 30px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <span>&lt;URL&gt;</span> SeaMark URL Shortner
+        </div>
+        <div class="login-body">
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4 text-success" :status="session('status')" />
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                <!-- Email Address -->
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required autofocus autocomplete="username">
+                    <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger small" />
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold">Password</label>
+                    <input type="password" name="password" class="form-control" required autocomplete="current-password">
+                    <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger small" />
+                </div>
+                
+                <!-- Remember Me -->
+                <div class="block mt-4 mb-3">
+                    <label for="remember_me" class="inline-flex items-center">
+                        <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
+                        <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                    </label>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    @if (Route::has('password.request'))
+                        <a class="text-decoration-none small" href="{{ route('password.request') }}">
+                            {{ __('Forgot your password?') }}
+                        </a>
+                    @endif
+
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+            @if (Route::has('register'))
+                <div class="text-center mt-3">
+                    <a href="{{ route('register') }}" class="text-decoration-none small">Register as new user</a>
+                </div>
+            @endif
+        </div>
+    </div>
+</body>
+</html>
