@@ -15,7 +15,7 @@ class UrlFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
         return [
             'original_url' => fake()->url(),

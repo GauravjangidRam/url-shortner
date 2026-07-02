@@ -10,7 +10,7 @@ class StoreUrlRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return $this->user() && in_array($this->user()->role, ['Admin', 'Member']);
     }
@@ -20,7 +20,7 @@ class StoreUrlRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'original_url' => 'required|url|max:2048',

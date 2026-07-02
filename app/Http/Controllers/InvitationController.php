@@ -31,14 +31,11 @@ class InvitationController extends Controller
     public function accept($token)
     {
         $invitation = Invitation::where('token', $token)->whereNull('accepted_at')->firstOrFail();
-
-        // If this email already has an account, mark invitation accepted and redirect to login
         if (User::where('email', $invitation->email)->exists()) {
             $invitation->update(['accepted_at' => now()]);
             return redirect()->route('login')
                 ->with('status', 'An account for ' . $invitation->email . ' already exists. Please log in.');
         }
-
         return view('invitations.accept', compact('invitation'));
     }
 

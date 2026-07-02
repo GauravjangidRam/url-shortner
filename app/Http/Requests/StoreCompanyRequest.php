@@ -10,7 +10,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return $this->user() && $this->user()->role === 'SuperAdmin';
     }
@@ -20,7 +20,7 @@ class StoreCompanyRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'name' => 'required|string|max:255|unique:companies,name',

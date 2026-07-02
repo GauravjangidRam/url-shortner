@@ -35,7 +35,6 @@ class UrlController extends Controller
     }
 
 
-
     public function export(Request $request)
     {
         $user = auth()->user();

@@ -7,8 +7,7 @@ use App\Models\Url;
 
 class UrlPolicy
 {
-   
-    public function view(User $user, Url $url): bool
+    public function view(User $user, Url $url)
     {
         return match ($user->role) {
             'SuperAdmin' => true,
@@ -17,6 +16,5 @@ class UrlPolicy
             default      => false,
         };
     }
-
 
 }

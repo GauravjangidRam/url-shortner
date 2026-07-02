@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class UrlService
 {
-    public function generateShortCode(): string
+    public function generateShortCode()
     {
         do {
             $shortCode = Str::random(6);
@@ -15,7 +15,7 @@ class UrlService
 
         return $shortCode;
     }
-    public function registerHit(Url $url): void
+    public function registerHit(Url $url)
 {
     $url->increment('hits');
 }

@@ -10,7 +10,7 @@ class StoreInvitationRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return $this->user() && $this->user()->role === 'Admin' && $this->user()->company_id !== null;
     }
@@ -20,7 +20,7 @@ class StoreInvitationRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'email' => 'required|email|max:255|unique:users,email',
