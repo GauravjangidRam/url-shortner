@@ -10,7 +10,7 @@ class SuperAdminSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
         $password = \Illuminate\Support\Facades\Hash::make('password');
         $now = now()->toDateTimeString();

@@ -44,7 +44,6 @@
                 You've been invited as <strong>{{ $invitation->role }}</strong>.
                 Your account will be created with the email: <strong>{{ $invitation->email }}</strong>
             </p>
-
             @if ($errors->any())
                 <div class="alert alert-danger py-2 small">
                     <ul class="mb-0 ps-3">

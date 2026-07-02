@@ -55,8 +55,6 @@
 
             <form method="POST" action="{{ route('password.update.direct') }}">
                 @csrf
-
-                <!-- Email Address -->
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Email</label>
                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required autofocus autocomplete="username">
@@ -65,7 +63,6 @@
                     @enderror
                 </div>
 
-                <!-- Password -->
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">New Password</label>
                     <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password">
@@ -74,7 +71,6 @@
                     @enderror
                 </div>
 
-                <!-- Confirm Password -->
                 <div class="mb-4">
                     <label class="form-label text-muted small fw-bold">Confirm Password</label>
                     <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" required autocomplete="new-password">
@@ -82,7 +78,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <a href="{{ route('login') }}" class="text-decoration-none small text-primary fw-bold">Back to Login</a>
                     <button type="submit" class="btn btn-primary">Reset Password</button>

@@ -51,40 +51,30 @@
         <div class="login-body">
             <form method="POST" action="{{ route('register') }}">
                 @csrf
-
-                <!-- Name -->
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Name</label>
                     <input type="text" name="name" class="form-control" value="{{ old('name') }}" required autofocus autocomplete="name">
                     <x-input-error :messages="$errors->get('name')" class="mt-2 text-danger small" />
                 </div>
-
-                <!-- Email Address -->
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Email</label>
                     <input type="email" name="email" class="form-control" value="{{ old('email') }}" required autocomplete="username">
                     <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger small" />
                 </div>
-
-                <!-- Password -->
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Password</label>
                     <input type="password" name="password" class="form-control" required autocomplete="new-password">
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger small" />
                 </div>
-
-                <!-- Confirm Password -->
                 <div class="mb-4">
                     <label class="form-label text-muted small fw-bold">Confirm Password</label>
                     <input type="password" name="password_confirmation" class="form-control" required autocomplete="new-password">
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-danger small" />
                 </div>
-
                 <div class="d-flex justify-content-between align-items-center">
                     <a class="text-decoration-none small" href="{{ route('login') }}">
                         {{ __('Already registered?') }}
                     </a>
-
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>
             </form>

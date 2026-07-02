@@ -11,7 +11,7 @@ class DemoAdminSeeder extends Seeder
     /**
      * Seed a demo company and an Admin user for testing purposes.
      */
-    public function run(): void
+    public function run()
     {
         if (DB::table('users')->where('email', 'admin@semberk.tech')->exists()) {
             $this->command->info('Demo Admin already exists — skipping.');

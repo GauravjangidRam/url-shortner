@@ -49,13 +49,11 @@
              URL Shortner
         </div>
         <div class="login-body">
-            <!-- Session Status -->
             <x-auth-session-status class="mb-4 text-success" :status="session('status')" />
 
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                <!-- Email Address -->
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Email</label>
                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required autofocus autocomplete="username">
@@ -64,7 +62,6 @@
                     @enderror
                 </div>
 
-                <!-- Password -->
                 <div class="mb-4">
                     <label class="form-label text-muted small fw-bold">Password</label>
                     <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="current-password">
@@ -73,7 +70,6 @@
                     @enderror
                 </div>
                 
-                <!-- Remember Me -->
                 <div class="block mt-4 mb-3">
                     <label for="remember_me" class="inline-flex items-center">
                         <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
@@ -85,7 +81,6 @@
                     <a class="text-decoration-none small text-primary fw-bold" href="{{ route('password.reset.direct') }}">
                         {{ __('Reset Password') }}
                     </a>
-
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
