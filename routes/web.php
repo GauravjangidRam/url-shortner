@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CompanyController;
@@ -33,7 +33,14 @@ Route::get('/dashboard', function () {
         $data['urls'] = (clone $query)->with('company')->latest()->paginate(10);
     } elseif ($user->role === 'Admin') {
         $data['urls'] = (clone $query)->where('company_id', $user->company_id)->latest()->paginate(10);
-        $data['members'] = \App\Models\User::where('company_id', $user->company_id)->get();
+        $data['members'] = \App\Models\User::where('company_id', $user->company_id)
+            ->withCount('urls')
+            ->withSum('urls', 'hits')
+            ->get();
+        $data['pendingInvitations'] = \App\Models\Invitation::where('company_id', $user->company_id)
+            ->whereNull('accepted_at')
+            ->latest()
+            ->get();
     } else {
         $data['urls'] = (clone $query)->where('user_id', $user->id)->latest()->paginate(10);
     }
@@ -44,11 +51,9 @@ Route::get('/dashboard', function () {
 Route::get('/urls/export', [\App\Http\Controllers\UrlController::class, 'export'])->name('urls.export')->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    Route::resource('companies', CompanyController::class)->middleware('role:SuperAdmin');
+    Route::get('/companies', [CompanyController::class, 'index'])->name('companies.index')->middleware('role:SuperAdmin');
+    Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create')->middleware('role:SuperAdmin');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store')->middleware('role:SuperAdmin');
     
     Route::get('/members/create', [InvitationController::class, 'create'])->name('members.create')->middleware('role:Admin');
     Route::post('/members', [InvitationController::class, 'store'])->name('members.store')->middleware('role:Admin');
@@ -56,10 +61,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/urls', [\App\Http\Controllers\UrlController::class, 'index'])->name('urls.index')->middleware('role:Admin,Member,SuperAdmin');
     Route::get('/urls/create', [\App\Http\Controllers\UrlController::class, 'create'])->name('urls.create')->middleware('role:Admin,Member');
     Route::post('/urls', [\App\Http\Controllers\UrlController::class, 'store'])->name('urls.store')->middleware('role:Admin,Member');
-    Route::get('/urls/{url}', [\App\Http\Controllers\UrlController::class, 'show'])->name('urls.show')->middleware('role:Admin,Member,SuperAdmin');
-    Route::get('/urls/{url}/edit', [\App\Http\Controllers\UrlController::class, 'edit'])->name('urls.edit')->middleware('role:Admin,Member');
-    Route::put('/urls/{url}', [\App\Http\Controllers\UrlController::class, 'update'])->name('urls.update')->middleware('role:Admin,Member');
-    Route::delete('/urls/{url}', [\App\Http\Controllers\UrlController::class, 'destroy'])->name('urls.destroy')->middleware('role:Admin,Member');
 });
 
 require __DIR__.'/auth.php';

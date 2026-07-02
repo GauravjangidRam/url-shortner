@@ -34,26 +34,7 @@ class UrlController extends Controller
         return redirect()->route('urls.index')->with('success', 'URL created successfully.');
     }
 
-    public function show(Url $url)
-    {
-        //
-    }
 
-    public function edit(Url $url)
-    {
-        //
-    }
-
-    public function update(Request $request, Url $url)
-    {
-        //
-    }
-
-    public function destroy(Url $url)
-    {
-        $url->delete();
-        return redirect()->route('urls.index')->with('success', 'URL deleted.');
-    }
 
     public function export(Request $request)
     {
