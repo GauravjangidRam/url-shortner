@@ -94,13 +94,16 @@
                 @if(auth()->user()->role !== 'SuperAdmin')
                     <a href="{{ route('urls.create') }}" class="btn btn-outline-primary btn-sm px-4">Generate</a>
                 @endif
-                <select class="form-select form-select-sm w-auto d-inline-block text-primary border-primary">
-                    <option>This Month</option>
-                    <option>Last Month</option>
-                    <option>Last Week</option>
-                    <option>Today</option>
-                </select>
-                <button class="btn btn-primary btn-sm px-4">Download</button>
+                <form action="{{ route('dashboard') }}" method="GET" class="mb-0 d-inline-block">
+                    <select name="filter" onchange="this.form.submit()" class="form-select form-select-sm w-auto d-inline-block text-primary border-primary">
+                        <option value="">All Time</option>
+                        <option value="today" {{ request('filter') == 'today' ? 'selected' : '' }}>Today</option>
+                        <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Last Week</option>
+                        <option value="this_month" {{ request('filter') == 'this_month' ? 'selected' : '' }}>This Month</option>
+                        <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Last Month</option>
+                    </select>
+                </form>
+                <a href="{{ route('urls.export', ['filter' => request('filter')]) }}" class="btn btn-primary btn-sm px-4">Download</a>
             </div>
         </div>
         <div class="card-body p-0">

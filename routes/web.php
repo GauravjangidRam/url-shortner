@@ -16,17 +16,34 @@ Route::post('/invitations/accept/{token}', [InvitationController::class, 'regist
 Route::get('/dashboard', function () {
     $user = auth()->user();
     $data = [];
+    
+    $query = \App\Models\Url::query();
+    
+    $filter = request('filter');
+    if ($filter === 'today') {
+        $query->whereDate('created_at', today());
+    } elseif ($filter === 'last_week') {
+        $query->whereBetween('created_at', [now()->subWeek(), now()]);
+    } elseif ($filter === 'last_month') {
+        $query->whereMonth('created_at', now()->subMonth()->month);
+    } elseif ($filter === 'this_month') {
+        $query->whereMonth('created_at', now()->month);
+    }
+    
     if ($user->role === 'SuperAdmin') {
         $data['companies'] = \App\Models\Company::withCount('users')->get();
-        $data['urls'] = \App\Models\Url::with('company')->latest()->paginate(10);
+        $data['urls'] = (clone $query)->with('company')->latest()->paginate(10);
     } elseif ($user->role === 'Admin') {
-        $data['urls'] = \App\Models\Url::where('company_id', $user->company_id)->latest()->paginate(10);
+        $data['urls'] = (clone $query)->where('company_id', $user->company_id)->latest()->paginate(10);
         $data['members'] = \App\Models\User::where('company_id', $user->company_id)->get();
     } else {
-        $data['urls'] = \App\Models\Url::where('user_id', $user->id)->latest()->paginate(10);
+        $data['urls'] = (clone $query)->where('user_id', $user->id)->latest()->paginate(10);
     }
+    $data['urls']->appends(['filter' => $filter]);
     return view('dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/urls/export', [\App\Http\Controllers\UrlController::class, 'export'])->name('urls.export')->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
