@@ -72,8 +72,8 @@
                             <td class="ps-4 py-3">{{ $member->name }}</td>
                             <td class="py-3">{{ $member->email }}</td>
                             <td class="py-3">{{ $member->role }}</td>
-                            <td class="py-3">--</td>
-                            <td class="text-end pe-4 py-3">--</td>
+                            <td class="py-3">{{ $member->urls_count }}</td>
+                            <td class="text-end pe-4 py-3">{{ $member->urls_sum_hits ?? 0 }}</td>
                         </tr>
                         @empty
                         <tr>
@@ -84,7 +84,101 @@
                 </table>
             </div>
         </div>
+
+        <!-- PENDING INVITATIONS -->
+        @if(isset($pendingInvitations) && $pendingInvitations->count() > 0)
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header py-3">
+                <span class="text-warning fw-bold">Pending Invitations</span>
+                <span class="badge bg-warning text-dark">{{ $pendingInvitations->count() }} pending</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4 text-muted fw-normal">Email</th>
+                            <th class="text-muted fw-normal">Role</th>
+                            <th class="text-muted fw-normal">Invitation Link</th>
+                            <th class="text-muted fw-normal text-end pe-4">Invited On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($pendingInvitations as $invitation)
+                        @php $inviteUrl = route('invitations.accept', $invitation->token); @endphp
+                        <tr>
+                            <td class="ps-4 py-3">{{ $invitation->email }}</td>
+                            <td class="py-3">
+                                <span class="badge bg-secondary">{{ $invitation->role }}</span>
+                            </td>
+                            <td class="py-3">
+                                <div class="input-group input-group-sm" style="max-width: 340px;">
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm font-monospace"
+                                        value="{{ $inviteUrl }}"
+                                        id="invite-link-{{ $invitation->id }}"
+                                        readonly
+                                    >
+                                    <button
+                                        class="btn btn-outline-secondary btn-sm"
+                                        type="button"
+                                        onclick="copyInviteLink('invite-link-{{ $invitation->id }}', this)"
+                                        title="Copy link"
+                                    >
+                                        Copy
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="text-end pe-4 py-3 text-muted">{{ $invitation->created_at->format('d M y') }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
     @endif
+
+    <script>
+    function copyInviteLink(inputId, btn) {
+        const input = document.getElementById(inputId);
+
+        // Try modern clipboard API first (works on HTTPS / localhost)
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(input.value).then(function () {
+                showCopied(btn);
+            }).catch(function () {
+                fallbackCopy(input, btn);
+            });
+        } else {
+            fallbackCopy(input, btn);
+        }
+    }
+
+    function fallbackCopy(input, btn) {
+        input.removeAttribute('readonly');
+        input.select();
+        input.setSelectionRange(0, 99999); // mobile support
+        try {
+            document.execCommand('copy');
+            showCopied(btn);
+        } catch (e) {
+            btn.textContent = 'Failed';
+        }
+        input.setAttribute('readonly', true);
+        window.getSelection().removeAllRanges();
+    }
+
+    function showCopied(btn) {
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.replace('btn-outline-secondary', 'btn-success');
+        setTimeout(function () {
+            btn.textContent = original;
+            btn.classList.replace('btn-success', 'btn-outline-secondary');
+        }, 2000);
+    }
+    </script>
 
     <!-- ALL ROLES GET GENERATED URLS -->
     <div class="card shadow-sm border-0 mb-4">

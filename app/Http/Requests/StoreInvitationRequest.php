@@ -24,6 +24,7 @@ class StoreInvitationRequest extends FormRequest
     {
         return [
             'email' => 'required|email|max:255|unique:users,email',
+            'role' => 'required|string|in:Admin,Member',
         ];
     }
 }

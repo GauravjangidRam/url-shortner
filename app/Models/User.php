@@ -22,6 +22,11 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    public function urls()
+    {
+        return $this->hasMany(Url::class);
+    }
+
 
     /**
      * Get the attributes that should be cast.

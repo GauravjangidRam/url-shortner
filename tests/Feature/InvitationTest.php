@@ -32,6 +32,7 @@ class InvitationTest extends TestCase
 
         $this->actingAs($admin)->post('/members', [
             'email' => 'member@acme.com',
+            'role' => 'Member'
         ])->assertRedirect();
 
         $this->assertDatabaseHas('invitations', [
