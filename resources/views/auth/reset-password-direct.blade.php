@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SeaMark URL Shortner</title>
+    <title>Reset Password - SeaMark URL Shortner</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -49,10 +49,11 @@
             <span>&lt;URL&gt;</span> SeaMark URL Shortner
         </div>
         <div class="login-body">
-            <!-- Session Status -->
-            <x-auth-session-status class="mb-4 text-success" :status="session('status')" />
+            <div class="mb-4 text-sm text-muted small">
+                {{ __('Directly reset your password below.') }}
+            </div>
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('password.update.direct') }}">
                 @csrf
 
                 <!-- Email Address -->
@@ -65,35 +66,28 @@
                 </div>
 
                 <!-- Password -->
-                <div class="mb-4">
-                    <label class="form-label text-muted small fw-bold">Password</label>
-                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="current-password">
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold">New Password</label>
+                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="new-password">
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                
-                <!-- Remember Me -->
-                <div class="block mt-4 mb-3">
-                    <label for="remember_me" class="inline-flex items-center">
-                        <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-                        <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                    </label>
+
+                <!-- Confirm Password -->
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold">Confirm Password</label>
+                    <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" required autocomplete="new-password">
+                    @error('password_confirmation')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <a class="text-decoration-none small text-primary fw-bold" href="{{ route('password.reset.direct') }}">
-                        {{ __('Reset Password') }}
-                    </a>
-
-                    <button type="submit" class="btn btn-primary">Login</button>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ route('login') }}" class="text-decoration-none small text-primary fw-bold">Back to Login</a>
+                    <button type="submit" class="btn btn-primary">Reset Password</button>
                 </div>
             </form>
-            @if (Route::has('register'))
-                <div class="text-center mt-3">
-                    <a href="{{ route('register') }}" class="text-decoration-none small">Register as new user</a>
-                </div>
-            @endif
         </div>
     </div>
 </body>

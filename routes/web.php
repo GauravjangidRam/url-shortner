@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvitationController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/login');
 
 Route::get('/invitations/accept/{token}', [InvitationController::class, 'accept'])->name('invitations.accept');
 Route::post('/invitations/accept/{token}', [InvitationController::class, 'register'])->name('invitations.register');
@@ -65,6 +63,26 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::middleware('guest')->group(function () {
+    Route::get('/reset-password-direct', function () {
+        return view('auth.reset-password-direct');
+    })->name('password.reset.direct');
+
+    Route::post('/reset-password-direct', function (\Illuminate\Http\Request $request) {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = \App\Models\User::where('email', $request->email)->first();
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password)
+        ]);
+
+        return redirect()->route('login')->with('success', 'Password has been reset successfully. You can now login.');
+    })->name('password.update.direct');
+});
 
 
 Route::get('/{shortCode}', [App\Http\Controllers\RedirectController::class, 'redirect'])
