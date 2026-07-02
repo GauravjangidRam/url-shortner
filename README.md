@@ -1,4 +1,4 @@
-# SeaMark URL Shortener
+# URL Shortener
 
 A multi-company URL shortener built with Laravel 12. 
 It supports multiple roles with strict visibility scoping and an invitation system.
