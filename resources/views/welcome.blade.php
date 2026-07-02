@@ -46,7 +46,7 @@
 <body>
     <div class="login-card">
         <div class="login-header">
-            <span>&lt;URL&gt;</span> URL Shortner
+            URL Shortner
         </div>
         <div class="login-body">
             <form method="POST" action="{{ route('login') }}">
